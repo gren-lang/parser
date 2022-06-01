@@ -25,7 +25,7 @@ type alias Point =
 
 point : Parser Point
 point =
-  succeed Point
+  succeed (\ x y -> { x = x, y = y })
     |. symbol "("
     |. spaces
     |= float

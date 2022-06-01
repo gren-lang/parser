@@ -239,7 +239,7 @@ succeed =
 
     point : Parser Point
     point =
-      succeed Point
+      succeed (\x y -> { x = x, y = y })
         |. symbol "("
         |. spaces
         |= float
@@ -938,11 +938,11 @@ withIndent =
 So you are just asking about things you said earlier. These numbers do not leak
 out of `withIndent`, so say we have:
 
-    succeed Tuple.pair
+    succeed (\a b -> { a = a, b = b })
       |= withIndent 4 getIndent
       |= getIndent
 
-Assuming there are no `withIndent` above this, you would get `(4,0)` from this.
+Assuming there are no `withIndent` above this, you would get `{ a = 4, b = 0 }` from this.
 -}
 getIndent : Parser Int
 getIndent =
@@ -961,14 +961,14 @@ In the Gren compiler, the start and end position of every expression is tracked
 like this:
 
     type alias Located a =
-      { start : (Int, Int)
+      { start : { row: Int, col: Int }
       , value : a
-      , end : (Int, Int)
+      , end : { row: Int, col: Int }
       }
 
     located : Parser a -> Parser (Located a)
     located parser =
-      succeed Located
+      succeed (\start value end -> { start = start, value = value, end = end })
         |= getPosition
         |= parser
         |= getPosition
@@ -1006,7 +1006,7 @@ getPosition =
   A.getPosition
 
 
-{-| This is a more efficient version of `map Tuple.first getPosition`. Maybe
+{-| This is a more efficient version of `map (\pos -> pos.row) getPosition`. Maybe
 you just want to track the line number for some reason? This lets you do that.
 
 See [`getPosition`](#getPosition) for an explanation of rows and columns.
@@ -1016,7 +1016,7 @@ getRow =
   A.getRow
 
 
-{-| This is a more efficient version of `map Tuple.second getPosition`. This
+{-| This is a more efficient version of `map (\pos -> pos.col) getPosition`. This
 can be useful in combination with [`withIndent`](#withIndent) and
 [`getIndent`](#getIndent), like this:
 
