@@ -1,11 +1,11 @@
-module Math exposing
+module Expression exposing
   ( Expr
   , evaluate
   , parse
   )
 
 
-import Html exposing (div, p, text)
+import Html exposing (div, p, pre, text)
 import Parser exposing (..)
 
 
@@ -15,10 +15,10 @@ import Parser exposing (..)
 
 main =
   case parse "2 * (3 + 4)" of
-    Err err ->
-      text (Debug.toString err)
+    Err deadEnds ->
+      pre [] [ text (deadEndsToString deadEnds) ]
 
-    Ok expr ->
+    Ok expr -> 
       div []
         [ p [] [ text (Debug.toString expr) ]
         , p [] [ text (String.fromFloat (evaluate expr)) ]
@@ -52,7 +52,7 @@ evaluate expr =
       evaluate a * evaluate b
 
 
-parse : String -> Result (List DeadEnd) Expr
+parse : String -> Result (Array DeadEnd) Expr
 parse string =
   run expression string
 
@@ -108,15 +108,15 @@ In one case, I need an operator and another term. If that happens I keep
 looking for more. In the other case, I am done parsing, and I finalize the
 expression.
 -}
-expressionHelp : List (Expr, Operator) -> Expr -> Parser Expr
+expressionHelp : Array { expr: Expr, operator: Operator } -> Expr -> Parser Expr
 expressionHelp revOps expr =
   oneOf
-    [ succeed Tuple.pair
+    [ succeed (\op newExpr -> { op = op, newExpr = newExpr })
         |. spaces
         |= operator
         |. spaces
         |= term
-        |> andThen (\(op, newExpr) -> expressionHelp ((expr,op) :: revOps) newExpr)
+        |> andThen (\{ op, newExpr } -> expressionHelp ( Array.pushFirst { expr = expr, operator = op } revOps) newExpr)
     , lazy (\_ -> succeed (finalize revOps expr))
     ]
 
@@ -140,14 +140,15 @@ This code is kind of tricky, but it is a baseline for what you would need if
 you wanted to add `/`, `-`, `==`, `&&`, etc. which bring in more complex
 associativity and precedence rules.
 -}
-finalize : List (Expr, Operator) -> Expr -> Expr
+finalize : Array { expr: Expr, operator: Operator } -> Expr -> Expr
 finalize revOps finalExpr =
-  case revOps of
-    [] ->
+  case Array.popFirst revOps of
+    Nothing ->
       finalExpr
+    Just { first, rest } -> 
+      case first.operator of 
+        MulOp -> 
+          finalize rest (Mul first.expr finalExpr)
 
-    (expr, MulOp) :: otherRevOps ->
-      finalize otherRevOps (Mul expr finalExpr)
-
-    (expr, AddOp) :: otherRevOps ->
-      Add (finalize otherRevOps expr) finalExpr
+        AddOp ->
+          Add (finalize rest first.expr) finalExpr

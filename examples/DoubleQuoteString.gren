@@ -1,3 +1,5 @@
+module DoubleQuoteString exposing (..)
+
 import Browser
 import Char
 import Html
@@ -24,10 +26,10 @@ string =
     |= loop [] stringHelp
 
 
-stringHelp : List String -> Parser (Step (List String) String)
-stringHelp revChunks =
+stringHelp : Array String -> Parser (Step (Array String) String)
+stringHelp chunks =
   oneOf
-    [ succeed (\chunk -> Loop (chunk :: revChunks))
+    [ succeed (\chunk -> Loop (Array.pushLast chunk chunks))
         |. token "\\"
         |= oneOf
             [ map (\_ -> "\n") (token "n")
@@ -39,10 +41,10 @@ stringHelp revChunks =
                 |. token "}"
             ]
     , token "\""
-        |> map (\_ -> Done (String.join "" (List.reverse revChunks)))
+        |> map (\_ -> Done (String.join "" chunks))
     , chompWhile isUninteresting
         |> getChompedString
-        |> map (\chunk -> Loop (chunk :: revChunks))
+        |> map (\chunk -> Loop (Array.pushLast chunk chunks))
     ]
 
 

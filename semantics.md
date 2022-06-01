@@ -192,4 +192,4 @@ parser =
 
 Now we are guaranteed to consume the spaces only one time. After that, we decide if we are looking at a `,` or `]`, so we never backtrack and reparse things.
 
-If you are strategic in shuffling parsers around, you can write parsers that do not need `backtrackable` at all. The resulting parsers are quite fast. They are essentially the same as [LR(k)](https://en.wikipedia.org/wiki/Canonical_LR_parser) parsers, but more pleasant to write. I did this in Elm compiler for parsing Elm code, and it was very significantly faster.
+If you are strategic in shuffling parsers around, you can write parsers that do not need `backtrackable` at all. The resulting parsers are quite fast. They are essentially the same as [LR(k)](https://en.wikipedia.org/wiki/Canonical_LR_parser) parsers, but more pleasant to write.

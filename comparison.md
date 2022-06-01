@@ -8,7 +8,7 @@ I have not seen the [parser pipeline][1] or the [context stack][2] ideas in othe
 
 Most parser combinator libraries I have seen are based on Haskell’s Parsec library, which has primitives named `try` and `lookAhead`. I believe [`backtrackable`][backtrackable] is a better primitive for two reasons.
 
-[backtrackable]: https://package.elm-lang.org/packages/elm/parser/latest/Parser#backtrackable
+[backtrackable]: https://package.gren-lang.org/packages/gren-lang/parser/latest/Parser#backtrackable
 
 
 ### Performance and Composition
@@ -38,7 +38,7 @@ Notice that we parse `spaces` twice no matter what.
 
 Notice that we also had to hardcode `[` in the `lookAhead`. What if we update `term` to parse records that start with `{` as well? To get good commits on records, we must remember to update `lookAhead` to look for `oneOf "[{"`. Implementation details are leaking out of `term`!
 
-With `backtrackable` in this Elm library, you can just say:
+With `backtrackable` in this Gren library, you can just say:
 
 ```elm
 spaceThenArg : Parser Expr

@@ -1,6 +1,6 @@
 /*
 
-import Elm.Kernel.Utils exposing (chr, Tuple2, Tuple3)
+import Gren.Kernel.Utils exposing (chr)
 
 */
 
@@ -26,7 +26,11 @@ var _Parser_isSubString = F5(function(smallString, offset, row, col, bigString)
 			)
 	}
 
-	return __Utils_Tuple3(isGood ? offset : -1, row, col);
+	return { 
+		__$newOffset: isGood ? offset : -1, 
+		__$newRow: row, 
+		__$newCol: col 
+	};
 });
 
 
@@ -83,7 +87,10 @@ var _Parser_consumeBase = F3(function(base, offset, string)
 		if (digit < 0 || base <= digit) break;
 		total = base * total + digit;
 	}
-	return __Utils_Tuple2(offset, total);
+	return { 
+		__$offset: offset, 
+		__$total: total 
+	};
 });
 
 
@@ -109,7 +116,10 @@ var _Parser_consumeBase16 = F2(function(offset, string)
 			break;
 		}
 	}
-	return __Utils_Tuple2(offset, total);
+	return { 
+		__$offset: offset, 
+		__$total: total 
+	};
 });
 
 
@@ -130,5 +140,9 @@ var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString
 			: ( col++, (code & 0xF800) === 0xD800 && offset++ )
 	}
 
-	return __Utils_Tuple3(newOffset, row, col);
+	return { 
+		__$newOffset: newOffset, 
+		__$newRow: row, 
+		__$newCol: col 
+	};
 });
