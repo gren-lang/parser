@@ -62,7 +62,7 @@ infix left 5 (|=) = keeper
 infix left 6 (|.) = ignorer
 
 
-{- NOTE: the (|.) oporator binds tighter to slightly reduce the amount
+{- NOTE: the (|.) operator binds tighter to slightly reduce the amount
 of recursion in pipelines. For example:
 
     func
@@ -1338,7 +1338,7 @@ multiComment open close nestable =
       nestableComment open close
 
 
-{-| Works just like [`Parser.Nestable`](Parser#nestable) to help distinguish
+{-| Works just like [`Parser.Nestable`](Parser#Nestable) to help distinguish
 between unnestable `/*` `*/` comments like in JS and nestable `{-` `-}`
 comments like in Gren.
 -}

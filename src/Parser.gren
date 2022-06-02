@@ -161,7 +161,7 @@ type Problem
 read.
 
 **Note:** This is just a baseline of quality. It cannot do anything with colors.
-It is not interactivite. It just turns the raw data into strings. I really hope
+It is not interactive. It just turns the raw data into strings. I really hope
 folks will check out the source code for some inspiration on how to turn errors
 into `Html` with nice colors and interaction! The `Parser.Advanced` module lets
 you work with context as well, which really unlocks another level of quality!
@@ -327,7 +327,7 @@ That means we will want to define our parser in terms of itself:
         ]
 
 **Notice that `boolean` uses `boolean` in its definition!** In Gren, you can
-only define a value in terms of itself it is behind a function call. So
+only define a value in terms of itself if it is behind a function call. So
 `lazy` helps us define these self-referential parsers. (`andThen` can be used
 for this as well!)
 -}
