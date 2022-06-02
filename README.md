@@ -15,7 +15,7 @@ This is achieved with a couple concepts that I have not seen in any other parser
 
 To parse a 2D point like `( 3, 4 )`, you might create a `point` parser like this:
 
-```elm
+```gren
 import Parser exposing (Parser, (|.), (|=), succeed, symbol, float, spaces)
 
 type alias Point =

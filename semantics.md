@@ -52,7 +52,7 @@ If `parserA` fails, that is our result.
 
 This is used to define our pipeline operators like this:
 
-```elm
+```gren
 (|.) a b = map2 (\keep ignore -> keep) a b
 (|=) a b = map2 (\func arg -> func arg) a b
 ```
@@ -134,7 +134,7 @@ This becomes useful when paired with `either`!
 
 Say we have the following `parser` definition:
 
-```elm
+```gren
 parser : Parser (Maybe Int)
 parser =
   oneOf
@@ -175,7 +175,7 @@ Notice that in the previous example, we parsed `spaces` twice in some cases. Thi
 
 So we can rewrite that last example to never backtrack:
 
-```elm
+```gren
 parser : Parser (Maybe Int)
 parser =
   succeed identity

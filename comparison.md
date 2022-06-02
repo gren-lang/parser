@@ -40,7 +40,7 @@ Notice that we also had to hardcode `[` in the `lookAhead`. What if we update `t
 
 With `backtrackable` in this Gren library, you can just say:
 
-```elm
+```gren
 spaceThenArg : Parser Expr
 spaceThenArg =
   succeed identity
@@ -55,7 +55,7 @@ It does less work, and is more reliable as `term` evolves. I believe the presenc
 
 You can define `try` in terms of [`backtrackable`][backtrackable] like this:
 
-```elm
+```gren
 try : Parser a -> Parser a
 try parser =
   succeed identity
