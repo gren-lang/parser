@@ -81,6 +81,3 @@ Notice that the error messages says `this list`. That is context! That is the la
 Once you get comfortable with the `Parser` module, you can switch over to `Parser.Advanced` and use [`inContext`](https://package.gren-lang.org/packages/gren-lang/parser/latest/Parser-Advanced#inContext) to track exactly what your parser thinks it is doing at the moment. You can let the parser know “I am trying to parse a `"list"` right now” so if an error happens anywhere in that context, you get the hand annotation!
 
 This technique is used by the parser in the Gren compiler to give more helpful error messages.
-
-
-## [Comparison with Prior Work](https://github.com/gren-lang/parser/blob/master/comparison.md)
