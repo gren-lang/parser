@@ -1,16 +1,17 @@
 {
     "type": "package",
+    "platform": "common",
     "name": "gren-lang/parser",
     "summary": "a parsing library, focused on simplicity and great error messages",
     "license": "BSD-3-Clause",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "exposed-modules": [
         "Parser",
         "Parser.Advanced"
     ],
-    "gren-version": "0.1.0 <= v < 0.2.0",
+    "gren-version": "0.2.0 <= v < 0.3.0",
     "dependencies": {
-        "gren-lang/core": "2.0.1 <= v < 3.0.0"
+        "gren-lang/core": "3.0.0 <= v < 4.0.0"
     },
     "test-dependencies": {}
 }
