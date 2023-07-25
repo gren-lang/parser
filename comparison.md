@@ -8,7 +8,7 @@ I have not seen the [parser pipeline][1] or the [context stack][2] ideas in othe
 
 Most parser combinator libraries I have seen are based on Haskell’s Parsec library, which has primitives named `try` and `lookAhead`. I believe [`backtrackable`][backtrackable] is a better primitive for two reasons.
 
-[backtrackable]: https://package.gren-lang.org/packages/gren-lang/parser/latest/Parser#backtrackable
+[backtrackable]: https://packages.gren-lang.org/package/gren-lang/parser/latest/Parser#backtrackable
 
 
 ### Performance and Composition

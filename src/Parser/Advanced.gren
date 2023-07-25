@@ -18,7 +18,7 @@ module Parser.Advanced exposing
 
 * * *
 **Everything past here works just like in the
-[`Parser`](/packages/gren-lang/parser/latest/Parser) module, except that `String`
+[`Parser`](/package/gren-lang/parser/latest/Parser) module, except that `String`
 arguments become `Token` arguments, and you need to provide a `Problem` for
 certain scenarios.**
 * * *
@@ -117,7 +117,7 @@ type Problem = BadIndent | BadKeyword String
 All of the functions from `Parser` should exist in `Parser.Advanced` in some
 form, allowing you to switch over pretty easily.
 
-[parser]: /packages/gren-lang/parser/latest/Parser
+[parser]: /package/gren-lang/parser/latest/Parser
 -}
 type Parser context problem value =
   Parser (State context -> PStep context problem value)
@@ -149,7 +149,7 @@ type alias Located context =
 -- RUN
 
 
-{-| This works just like [`Parser.run`](/packages/gren-lang/parser/latest/Parser#run).
+{-| This works just like [`Parser.run`](/package/gren-lang/parser/latest/Parser#run).
 The only difference is that when it fails, it has much more precise information
 for each dead end.
 -}
