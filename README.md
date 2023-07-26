@@ -44,8 +44,8 @@ All the interesting stuff is happening in `point`. It uses two operators:
 
 So the `Point` function only gets the result of the two `float` parsers.
 
-[ignore]: https://packages.gren-lang.org/package/gren-lang/parser/version/3.0.1/module/Parser#|.
-[keep]: https://packages.gren-lang.org/package/gren-lang/parser/version/3.0.1/module/Parser#|=
+[ignore]: https://packages.gren-lang.org/package/gren-lang/parser/latest/module/Parser#|.
+[keep]: https://packages.gren-lang.org/package/gren-lang/parser/latest/module/Parser#|=
 
 The theory is that `|=` introduces more “visual noise” than `|.`, making it pretty easy to pick out which lines in the pipeline are important.
 
@@ -59,7 +59,7 @@ To make fast parsers with precise error messages, all of the parsers in this pac
 
 This is nice in a string like `[ 1, 23zm5, 3 ]` where you want the error at the `z`. If we had backtracking by default, you might get the error on `[` instead. That is way less specific and harder to fix!
 
-So the defaults are nice, but sometimes the easiest way to write a parser is to look ahead a bit and see what is going to happen. It is definitely more costly to do this, but it can be handy if there is no other way. This is the role of [`backtrackable`](https://packages.gren-lang.org/package/gren-lang/parser/version/3.0.1/module/Parser#backtrackable) parsers. Check out the [semantics](https://github.com/gren-lang/parser/blob/main/semantics.md) page for more details!
+So the defaults are nice, but sometimes the easiest way to write a parser is to look ahead a bit and see what is going to happen. It is definitely more costly to do this, but it can be handy if there is no other way. This is the role of [`backtrackable`](https://packages.gren-lang.org/package/gren-lang/parser/latest/module/Parser#backtrackable) parsers. Check out the [semantics](https://github.com/gren-lang/parser/blob/main/semantics.md) page for more details!
 
 ## Tracking Context
 
@@ -77,6 +77,6 @@ That may be true, but it is not how humans think. It is how text editors think! 
 
 Notice that the error messages says `this list`. That is context! That is the language my brain speaks, not rows and columns.
 
-Once you get comfortable with the `Parser` module, you can switch over to `Parser.Advanced` and use [`inContext`](https://packages.gren-lang.org/package/gren-lang/parser/version/3.0.1/module/Parser.Advanced#inContext) to track exactly what your parser thinks it is doing at the moment. You can let the parser know “I am trying to parse a `"list"` right now” so if an error happens anywhere in that context, you get the hand annotation!
+Once you get comfortable with the `Parser` module, you can switch over to `Parser.Advanced` and use [`inContext`](https://packages.gren-lang.org/package/gren-lang/parser/latest/module/Parser.Advanced#inContext) to track exactly what your parser thinks it is doing at the moment. You can let the parser know “I am trying to parse a `"list"` right now” so if an error happens anywhere in that context, you get the hand annotation!
 
 This technique is used by the parser in the Gren compiler to give more helpful error messages.
