@@ -313,7 +313,7 @@ keeper parseFunc parseArg =
 -}
 ignorer : Parser c x keep -> Parser c x ignore -> Parser c x keep
 ignorer keepParser ignoreParser =
-  map2 always keepParser ignoreParser
+  map2 (\val _ -> val) keepParser ignoreParser
 
 
 
@@ -791,7 +791,7 @@ end x =
 -}
 getChompedString : Parser c x a -> Parser c x String
 getChompedString parser =
-  mapChompedString always parser
+  mapChompedString (\str _ -> str) parser
 
 
 {-| Just like [`Parser.mapChompedString`](Parser#mapChompedString)
