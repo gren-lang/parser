@@ -94,7 +94,7 @@ of the string!
 -}
 run : Parser a -> String -> Result (Array DeadEnd) a
 run parser source =
-  case A.run parser source of
+  when A.run parser source is
     Ok a ->
       Ok a
 
@@ -177,7 +177,7 @@ deadEndsToString deadEnds =
 deadEndToString : DeadEnd -> String
 deadEndToString deadEnd =
   String.join " " 
-    [ case deadEnd.problem of
+    [ when deadEnd.problem is
         Expecting str ->
             "Expecting: \"" ++ str ++ "\""
         ExpectingInt ->
@@ -500,7 +500,7 @@ token str =
 
 toToken : String -> A.Token Problem
 toToken str =
-  A.Token str (Expecting str)
+  A.Token { str = str, expecting = (Expecting str) }
 
 
 
@@ -571,7 +571,7 @@ type Step state a
 
 toAdvancedStep : Step s a -> A.Step s a
 toAdvancedStep step =
-  case step of
+  when step is
     Loop s -> A.Loop s
     Done a -> A.Done a
 
@@ -727,14 +727,14 @@ operator it is afterwards.
 -}
 symbol : String -> Parser {}
 symbol str =
-  A.symbol (A.Token str (ExpectingSymbol str))
+  A.symbol (A.Token { str = str, expecting = (ExpectingSymbol str) })
 
 
 
 -- KEYWORD
 
 
-{-| Parse keywords like `let`, `case`, and `type`.
+{-| Parse keywords like `let`, `when`, and `type`.
 
     run (keyword "let") "let"     == Ok {}
     run (keyword "let") "var"     == Err ... (ExpectingKeyword "let") ...
@@ -758,7 +758,7 @@ be parsed as `let ters` and then wonder where the equals sign is! Check out the
 -}
 keyword : String -> Parser {}
 keyword kwd =
-  A.keyword (A.Token kwd (ExpectingKeyword kwd))
+  A.keyword (A.Token { str = kwd, expecting = (ExpectingKeyword kwd) })
 
 
 
@@ -1088,7 +1088,7 @@ we could try something like this:
       variable
         { start = Char.isLower
         , inner = \c -> Char.isAlphaNum c || c == '_'
-        , reserved = Set.fromList [ "let", "in", "case", "of" ]
+        , reserved = Set.fromList [ "let", "in", "when", "of" ]
         }
 
 This is saying it _must_ start with a lower-case character. After that,
@@ -1166,7 +1166,7 @@ type Trailing = Forbidden | Optional | Mandatory
 
 toAdvancedTrailing : Trailing -> A.Trailing
 toAdvancedTrailing trailing =
-  case trailing of
+  when trailing is
     Forbidden -> A.Forbidden
     Optional -> A.Optional
     Mandatory -> A.Mandatory
@@ -1295,6 +1295,6 @@ type Nestable = NotNestable | Nestable
 
 toAdvancedNestable : Nestable -> A.Nestable
 toAdvancedNestable nestable =
-  case nestable of
+  when nestable is
     NotNestable -> A.NotNestable
     Nestable -> A.Nestable
