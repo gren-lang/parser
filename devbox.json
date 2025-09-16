@@ -6,11 +6,13 @@
   ],
   "shell": {
     "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
+      "echo nodejs: $(node --version)",
+      "echo gren: $(gren --version)"
     ],
     "scripts": {
       "test": [
-        "echo \"Error: no test specified\" && exit 1"
+        "cd tests",
+        "gren run Main"
       ]
     }
   }

@@ -1,0 +1,15 @@
+module Main exposing (main)
+
+import Expect
+import Test exposing (describe, test)
+import Test.Runner.Node exposing (Program, run)
+
+
+
+main : Program
+main =
+    run <|
+        describe "Parser Tests"
+            [ test "TODO" <| \{} ->
+                Expect.pass
+            ]
