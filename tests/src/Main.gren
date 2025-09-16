@@ -3,6 +3,7 @@ module Main exposing (main)
 import Expect
 import Test exposing (describe, test)
 import Test.Runner.Node exposing (Program, run)
+import Parser as P
 
 
 
@@ -10,6 +11,22 @@ main : Program
 main =
     run <|
         describe "Parser Tests"
-            [ test "TODO" <| \{} ->
-                Expect.pass
+            [ describe "int"
+                [ test "Simple integer" <| \{} ->
+                    P.run P.int "123456"
+                        |> Expect.equal (Ok 123456)
+                , test "Failure case" <| \{} ->
+                    P.run P.int "3.1415"
+                        |> expectErr
+                ]
             ]
+
+
+expectErr : Result err ok -> Expect.Expectation
+expectErr result =
+    when result is
+        Err _ ->
+            Expect.pass
+
+        Ok _ ->
+            Expect.fail "I expected this test to fail with an Err case"
