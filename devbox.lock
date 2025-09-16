@@ -5,9 +5,53 @@
       "last_modified": "2025-07-17T10:11:59Z",
       "resolved": "github:NixOS/nixpkgs/fa0ef8a6bb1651aa26c939aeb51b5f499e86b0ec?lastModified=1752747119&narHash=sha256-2Kp9St3Pbsmu%2BxMsobLcgzzUxPvZR7alVJWyuk2BAPc%3D"
     },
-    "github:gren-lang/nix/0.5.4": {
-      "last_modified": "2025-03-24T10:35:41Z",
-      "resolved": "github:gren-lang/nix/35601dd5c34adce2bbc6740ccc19a55078eb27be?lastModified=1742812541&narHash=sha256-iJcZAefSQM67bMRlJPEXT0%2FkVUoEmcr9NYTUPLoAO%2FE%3D"
+    "gren@0.6": {
+      "last_modified": "2025-08-05T11:35:34Z",
+      "resolved": "github:NixOS/nixpkgs/a683adc19ff5228af548c6539dbc3440509bfed3#gren",
+      "source": "devbox-search",
+      "version": "0.6.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1p0vb5l9vq8j9bhna05hzgzqygb05cjk-gren-0.6.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1p0vb5l9vq8j9bhna05hzgzqygb05cjk-gren-0.6.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vr3jccalhkhpsz53dpvx8sd9q2d2wy3s-gren-0.6.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vr3jccalhkhpsz53dpvx8sd9q2d2wy3s-gren-0.6.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jdh0sfgc5144b2l7fwyq0qzax65pxgcx-gren-0.6.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/jdh0sfgc5144b2l7fwyq0qzax65pxgcx-gren-0.6.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qqni6nqfjb1kw4qg7ad0hkvjrk78ir69-gren-0.6.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/qqni6nqfjb1kw4qg7ad0hkvjrk78ir69-gren-0.6.2"
+        }
+      }
     },
     "nodejs@20": {
       "last_modified": "2025-07-13T22:45:35Z",
