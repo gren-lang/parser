@@ -1,7 +1,7 @@
 module Parser.Advanced exposing
   ( Parser, run, DeadEnd, inContext, Token(..)
   , int, float, number, symbol, keyword, variable, end
-  , succeed, (|=), (|.), lazy, andThen, problem
+  , succeed, (|=), (|.), keep, skip, lazy, andThen, problem
   , oneOf, map, backtrackable, commit, token
   , sequence, Trailing(..), loop, Step(..)
   , spaces, lineComment, multiComment, Nestable(..)
@@ -321,6 +321,19 @@ ignorer : Parser c x keep -> Parser c x ignore -> Parser c x keep
 ignorer keepParser ignoreParser =
   map2 (\val _ -> val) keepParser ignoreParser
 
+
+{-| Just like the [`(|=)`](Parser#|=) from the `Parser` module.
+-}
+keep : Parser c x a -> Parser c x (a -> b) -> Parser c x b
+keep parseArg parseFunc =
+  map2 (<|) parseFunc parseArg
+
+
+{-| Just like the [`(|.)`](Parser#|.) from the `Parser` module.
+-}
+skip : Parser c x ignore -> Parser c x keep -> Parser c x keep
+skip ignoreParser keepParser =
+  map2 (\val _ -> val) keepParser ignoreParser
 
 
 -- AND THEN
@@ -1254,8 +1267,8 @@ sequence
     }
   -> Parser c x (Array a)
 sequence i =
-  skip (token i.start) <|
-  skip i.spaces <|
+  seqSkip (token i.start) <|
+  seqSkip i.spaces <|
     sequenceEnd (token i.end) i.spaces i.item (token i.separator) i.trailing
 
 
@@ -1266,8 +1279,8 @@ club](https://poorlydrawnlines.com/comic/shapes-club/)!
 type Trailing = Forbidden | Optional | Mandatory
 
 
-skip : Parser c x ignore -> Parser c x keep -> Parser c x keep
-skip iParser kParser =
+seqSkip : Parser c x ignore -> Parser c x keep -> Parser c x keep
+seqSkip iParser kParser =
   map2 revAlways iParser kParser
 
 

@@ -3,7 +3,7 @@ module Main exposing (main)
 import Expect
 import Test exposing (describe, test)
 import Test.Runner.Node exposing (Program, run)
-import Parser as P
+import Parser as P exposing ((|.), (|=))
 
 
 
@@ -18,6 +18,28 @@ main =
                 , test "Failure case" <| \{} ->
                     P.run P.int "3.1415"
                         |> expectErr
+                ]
+            , describe "combinators"
+                [ test "functions" <| \{} ->
+                    let
+                        parser =
+                            P.succeed (\a b -> a + b)
+                                |> P.keep P.int
+                                |> P.skip (P.symbol "+")
+                                |> P.keep P.int
+                    in
+                    P.run parser "3+5"
+                        |> Expect.equal (Ok 8)
+                , test "operators" <| \{} ->
+                    let
+                        parser =
+                            P.succeed (\a b -> a + b)
+                                |= P.int
+                                |. P.symbol "+"
+                                |= P.int
+                    in
+                    P.run parser "2+2"
+                        |> Expect.equal (Ok 4)
                 ]
             ]
 

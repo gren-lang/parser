@@ -1,7 +1,7 @@
 module Parser exposing
   ( Parser, run
   , int, float, number, symbol, keyword, variable, end
-  , succeed, (|=), (|.), lazy, andThen, problem
+  , succeed, (|=), (|.), keep, skip, lazy, andThen, problem
   , oneOf, map, backtrackable, commit, token
   , sequence, Trailing(..), loop, Step(..)
   , spaces, lineComment, multiComment, Nestable(..)
@@ -289,6 +289,16 @@ skip the two `{}` values that get produced. No one cares about them.
 ignorer : Parser keep -> Parser ignore -> Parser keep
 ignorer =
   (|.)
+
+
+keep : Parser keep -> Parser (keep -> b) -> Parser b
+keep =
+  A.keep
+
+
+skip : Parser ignore -> Parser kept -> Parser kept
+skip =
+  A.skip
 
 
 {-| Helper to define recursive parsers. Say we want a parser for simple
