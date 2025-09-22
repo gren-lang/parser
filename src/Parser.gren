@@ -948,7 +948,7 @@ withIndent =
 
 {-| When someone said `withIndent` earlier, what number did they put in there?
 
-- `getIndent` results in `0`, the default value
+- `getIndent` results in `1`, the default value
 - `withIndent 4 getIndent` results in `4`
 
 So you are just asking about things you said earlier. These numbers do not leak
@@ -958,7 +958,7 @@ out of `withIndent`, so say we have:
       |= withIndent 4 getIndent
       |= getIndent
 
-Assuming there are no `withIndent` above this, you would get `{ a = 4, b = 0 }` from this.
+Assuming there are no `withIndent` above this, you would get `{ a = 4, b = 4 }` from this.
 -}
 getIndent : Parser Int
 getIndent =
