@@ -141,7 +141,7 @@ var _Parser_findSubString = F5(function(smallString, offset, row, col, bigString
 	}
 
 	return { 
-		__$newOffset: newOffset, 
+		__$newOffset: newOffset < 0 ? -1 : target, 
 		__$newRow: row, 
 		__$newCol: col 
 	};

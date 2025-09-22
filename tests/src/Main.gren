@@ -32,6 +32,9 @@ main =
                 , test "Simple complex float" <| \{} ->
                     P.run P.float "3.1415"
                         |> Expect.equal (Ok 3.1415)
+                , test "Period is not a valid float" <| \{} ->
+                    P.run P.float "."
+                        |> expectErr
                 ]
             , describe "keyword"
                 [ test "Simple keyword" <| \{} ->
@@ -68,6 +71,17 @@ main =
                     in
                     P.run parser "2+2"
                         |> Expect.equal (Ok 4)
+                ]
+            , describe "chompUntil"
+                [ test "Simple case" <| \{} ->
+                    let
+                        chomper =
+                            P.succeed (\value { row, col } -> { value = value, row = row, column = col })
+                                |> P.keep (P.getChompedString (P.chompUntil "bar"))
+                                |> P.keep P.getPosition
+                    in
+                    P.run chomper "foobar"
+                        |> Expect.equal (Ok { value = "foobar", row = 1, column = 7 })
                 ]
             ]
 
