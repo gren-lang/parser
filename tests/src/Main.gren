@@ -19,6 +19,28 @@ main =
                     P.run P.int "3.1415"
                         |> expectErr
                 ]
+            , describe "float"
+                [ test "Simple float" <| \{} ->
+                    P.run P.float "123"
+                        |> Expect.equal (Ok 123)
+                , test "Simple complex float" <| \{} ->
+                    P.run P.float "3.1415"
+                        |> Expect.equal (Ok 3.1415)
+                ]
+            , describe "keyword"
+                [ test "Simple keyword" <| \{} ->
+                    P.run (P.keyword "true") "true"
+                        |> Expect.equal (Ok {})
+                , test "Is case sensetive" <| \{} ->
+                    P.run (P.keyword "true") "True"
+                        |> expectErr
+                , test "Must match exactly" <| \{} ->
+                    P.run (P.keyword "true") "false"
+                        |> expectErr
+                , test "Can be a prefix" <| \{} ->
+                    P.run (P.keyword "true") "true!"
+                        |> Expect.equal (Ok {})
+                ]
             , describe "combinators"
                 [ test "functions" <| \{} ->
                     let
