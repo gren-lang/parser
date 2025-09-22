@@ -1267,8 +1267,8 @@ sequence
     }
   -> Parser c x (Array a)
 sequence i =
-  seqSkip (token i.start) <|
-  seqSkip i.spaces <|
+  revSkip (token i.start) <|
+  revSkip i.spaces <|
     sequenceEnd (token i.end) i.spaces i.item (token i.separator) i.trailing
 
 
@@ -1279,8 +1279,8 @@ club](https://poorlydrawnlines.com/comic/shapes-club/)!
 type Trailing = Forbidden | Optional | Mandatory
 
 
-seqSkip : Parser c x ignore -> Parser c x keep -> Parser c x keep
-seqSkip iParser kParser =
+revSkip : Parser c x ignore -> Parser c x keep -> Parser c x keep
+revSkip iParser kParser =
   map2 revAlways iParser kParser
 
 
@@ -1302,7 +1302,7 @@ sequenceEnd ender ws parseItem sep trailing =
 
         Mandatory ->
           ignorer
-            ( skip ws <| skip sep <| skip ws <|
+            ( revSkip ws <| revSkip sep <| revSkip ws <|
                 loop [item] (sequenceEndMandatory ws parseItem sep)
             )
             ender
@@ -1315,13 +1315,9 @@ sequenceEnd ender ws parseItem sep trailing =
 
 sequenceEndForbidden : Parser c x {} -> Parser c x {} -> Parser c x a -> Parser c x {} -> Array a -> Parser c x (Step (Array a) (Array a))
 sequenceEndForbidden ender ws parseItem sep items =
-  let
-    chompRest item =
-      sequenceEndForbidden ender ws parseItem sep (Array.pushLast item items)
-  in
-  skip ws <|
+  revSkip ws <|
     oneOf
-      [ skip sep <| skip ws <| map (\item -> Loop (Array.pushLast item items)) parseItem
+      [ revSkip sep <| revSkip ws <| map (\item -> Loop (Array.pushLast item items)) parseItem
       , ender |> map (\_ -> Done items )
       ]
 
@@ -1332,9 +1328,9 @@ sequenceEndOptional ender ws parseItem sep items =
     parseEnd =
       map (\_ -> Done items) ender
   in
-  skip ws <|
+  revSkip ws <|
     oneOf
-      [ skip sep <| skip ws <|
+      [ revSkip sep <| revSkip ws <|
           oneOf
             [ parseItem |> map (\item -> Loop (Array.pushLast item items))
             , parseEnd
@@ -1415,7 +1411,7 @@ nestableComment (Token { str = oStr, expecting = oX } as open) (Token { str = cS
 
 nestableHelp : (Char -> Bool) -> Parser c x {} -> Parser c x {} -> x -> Int -> Parser c x {}
 nestableHelp isNotRelevant open close expectingClose nestLevel =
-  skip (chompWhile isNotRelevant) <|
+  revSkip (chompWhile isNotRelevant) <|
     oneOf
       [ if nestLevel == 1 then
           close
