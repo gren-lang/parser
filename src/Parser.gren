@@ -594,13 +594,16 @@ toAdvancedStep step =
 
     run int "1"    == Ok 1
     run int "1234" == Ok 1234
+    run int "0123" == Ok 0
+    run int "123a" == Ok 123
 
     run int "-789" == Err ...
-    run int "0123" == Err ...
     run int "1.34" == Err ...
     run int "1e31" == Err ...
-    run int "123a" == Err ...
     run int "0x1A" == Err ...
+
+This parser does not look ahead, which is why "0123" and "123a" succeeds with
+the digits it did succeed to parse.
 
 If you want to handle a leading `+` or `-` you should do it with a custom
 parser like this:
@@ -633,6 +636,9 @@ int =
     run float "6.022e23"  == Ok 6.022e23
     run float "6.022E23"  == Ok 6.022e23
     run float "6.022e+23" == Ok 6.022e23
+
+This parser does not look ahead, which is why "0123" and "123a" succeeds with
+the digits it did succeed to parse.
 
 If you want to disable literals like `.123` (like in Gren) you could write
 something like this:

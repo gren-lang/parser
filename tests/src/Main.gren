@@ -15,6 +15,12 @@ main =
                 [ test "Simple integer" <| \{} ->
                     P.run P.int "123456"
                         |> Expect.equal (Ok 123456)
+                , test "Leading 0" <| \{} ->
+                    P.run P.int "0123"
+                        |> Expect.equal (Ok 0)
+                , test "Trailing letters" <| \{} ->
+                    P.run P.int "123a"
+                        |> Expect.equal (Ok 123)
                 , test "Failure case" <| \{} ->
                     P.run P.int "3.1415"
                         |> expectErr
