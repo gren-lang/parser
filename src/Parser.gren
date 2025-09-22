@@ -21,7 +21,7 @@ module Parser exposing
 @docs int, float, number, symbol, keyword, variable, end
 
 # Pipelines
-@docs succeed, (|=), (|.), lazy, andThen, problem
+@docs succeed, (|=), (|.), keep, skip, lazy, andThen, problem
 
 # Branches
 @docs oneOf, map, backtrackable, commit, token
@@ -233,6 +233,20 @@ succeed =
   A.succeed
 
 
+{-| Deprecated. Please look at [keep](#keep) instead.
+-}
+keeper : Parser (a -> b) -> Parser a -> Parser b
+keeper =
+  (|=)
+
+
+{-| Deprecated. Please look at [skip](#skip) instead.
+-}
+ignorer : Parser keep -> Parser ignore -> Parser keep
+ignorer =
+  (|.)
+
+
 {-| **Keep** values in a parser pipeline. For example, we could say:
 
     type alias Point = { x : Float, y : Float }
@@ -240,15 +254,15 @@ succeed =
     point : Parser Point
     point =
       succeed (\x y -> { x = x, y = y })
-        |. symbol "("
-        |. spaces
-        |= float
-        |. spaces
-        |. symbol ","
-        |. spaces
-        |= float
-        |. spaces
-        |. symbol ")"
+        |> skip (symbol "(")
+        |> skip spaces
+        |> keep float
+        |> skip spaces
+        |> skip (symbol ",")
+        |> skip spaces
+        |> keep float
+        |> skip spaces
+        |> skip (symbol ")")
 
 All the parsers in this pipeline will chomp characters and produce values. So
 `symbol "("` will chomp one paren and produce a `{}` value. Similarly, `float`
@@ -258,9 +272,9 @@ operators just decide whether we give the values to the `Point` function.
 So in this case, we skip the `{}` from `symbol "("`, we skip the `{}` from
 `spaces`, we keep the `Float` from `float`, etc.
 -}
-keeper : Parser (a -> b) -> Parser a -> Parser b
-keeper =
-  (|=)
+keep : Parser keep -> Parser (keep -> b) -> Parser b
+keep =
+  A.keep
 
 
 {-| **Skip** values in a parser pipeline. For example, maybe we want to parse
@@ -270,8 +284,8 @@ some JavaScript variables:
     var =
       getChompedString <|
         succeed {}
-          |. chompIf isStartChar
-          |. chompWhile isInnerChar
+          |> skip (chompIf isStartChar)
+          |> skip (chompWhile isInnerChar)
 
     isStartChar : Char -> Bool
     isStartChar char =
@@ -286,16 +300,6 @@ some JavaScript variables:
 value. The `(|.)` operators are saying to still chomp all the characters, but
 skip the two `{}` values that get produced. No one cares about them.
 -}
-ignorer : Parser keep -> Parser ignore -> Parser keep
-ignorer =
-  (|.)
-
-
-keep : Parser keep -> Parser (keep -> b) -> Parser b
-keep =
-  A.keep
-
-
 skip : Parser ignore -> Parser kept -> Parser kept
 skip =
   A.skip

@@ -27,7 +27,7 @@ certain scenarios.**
 @docs int, float, number, symbol, keyword, variable, end
 
 # Pipelines
-@docs succeed, (|=), (|.), lazy, andThen, problem
+@docs succeed, (|=), (|.), keep, skip, lazy, andThen, problem
 
 # Branches
 @docs oneOf, map, backtrackable, commit, token
@@ -322,14 +322,14 @@ ignorer keepParser ignoreParser =
   map2 (\val _ -> val) keepParser ignoreParser
 
 
-{-| Just like the [`(|=)`](Parser#|=) from the `Parser` module.
+{-| Just like [keep](Parser#keep) from the `Parser` module.
 -}
 keep : Parser c x a -> Parser c x (a -> b) -> Parser c x b
 keep parseArg parseFunc =
   map2 (<|) parseFunc parseArg
 
 
-{-| Just like the [`(|.)`](Parser#|.) from the `Parser` module.
+{-| Just like [skip](Parser#skip) from the `Parser` module.
 -}
 skip : Parser c x ignore -> Parser c x keep -> Parser c x keep
 skip ignoreParser keepParser =
