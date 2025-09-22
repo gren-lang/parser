@@ -641,7 +641,7 @@ something like this:
     grenFloat =
       oneOf
         [ symbol "."
-            |. problem "floating point numbers must start with a digit, like 0.25"
+            |> andThen (\_ -> problem "floating point numbers must start with a digit, like 0.25")
         , float
         ]
 
