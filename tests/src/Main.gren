@@ -72,14 +72,49 @@ main =
                     P.run parser "2+2"
                         |> Expect.equal (Ok 4)
                 ]
-            , describe "chompUntil"
-                [ test "Simple case" <| \{} ->
+            , describe "Chomping"
+                [ test "chompIf" <| \{} ->
+                    let
+                        chomper =
+                            P.succeed {}
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.getChompedString
+                    in
+                    P.run chomper "abc test"
+                        |> Expect.equal (Ok "abc")
+                , test "chompIf failure" <| \{} ->
+                    let
+                        chomper =
+                            P.succeed {}
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.skip (P.chompIf Char.isAlpha)
+                                |> P.getChompedString
+                    in
+                    P.run chomper "a2c test"
+                        |> Expect.err
+                , test "chompIf unicode" <| \{} ->
+                    let
+                        chomper =
+                            P.succeed {}
+                                |> P.skip (P.chompIf (\_ -> True))
+                                |> P.skip (P.chompIf (\_ -> True))
+                                |> P.skip (P.chompIf (\_ -> True))
+                                |> P.getChompedString
+                    in
+                    P.run chomper "a𤭢c test"
+                        |> Expect.equal (Ok "a𤭢c")
+                , test "chompUntil" <| \{} ->
                     let
                         chomper =
                             P.succeed (\value { row, col } -> { value = value, row = row, column = col })
                                 |> P.keep (P.getChompedString (P.chompUntil "bar"))
                                 |> P.keep P.getPosition
                     in
+                    -- A little bit more complicated than it needs to be, in order to check
+                    -- parser state
                     P.run chomper "foobar"
                         |> Expect.equal (Ok { value = "foobar", row = 1, column = 7 })
                 ]
