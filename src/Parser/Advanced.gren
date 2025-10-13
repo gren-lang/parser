@@ -746,7 +746,7 @@ finalizeFloat invalid expecting intSettings floatSettings intPair s =
         Bad { pred = True, bag = (fromState s invalid) }
 
       Ok toValue ->
-        when String.toFloat (String.slice s.offset floatOffset s.src) is
+        when String.toFloat (String.sliceUnits s.offset floatOffset s.src) is
           Nothing -> Bad { pred = True, bag = (fromState s invalid) }
           Just n -> Good { pred = True, value = (toValue n), state = (bumpOffset floatOffset s) }
 
@@ -830,7 +830,7 @@ mapChompedString func (Parser parse) =
         Bad { pred = p, bag = x }
 
       Good { pred = p, value = a, state = s1 } ->
-        Good { pred = p, value = (func (String.slice s0.offset s1.offset s0.src) a), state = s1 }
+        Good { pred = p, value = (func (String.sliceUnits s0.offset s1.offset s0.src) a), state = s1 }
 
 
 
@@ -1220,7 +1220,7 @@ variable i =
             varHelp i.inner firstOffset s.row (s.col + 1) s.src s.indent s.context
 
         name =
-          String.slice s.offset s1.offset s.src
+          String.sliceUnits s.offset s1.offset s.src
       in
       if Set.member name i.reserved then
         Bad { pred = False, bag = (fromState s i.expecting) }
