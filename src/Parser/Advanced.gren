@@ -2,7 +2,7 @@ module Parser.Advanced exposing
   ( Parser, run, DeadEnd, inContext, Token(..)
   , int, float, number, symbol, keyword, variable, end
   , succeed, (|=), (|.), keep, skip, lazy, andThen, problem
-  , oneOf, map, backtrackable, commit, token
+  , oneOf, map, mapError, backtrackable, commit, token
   , sequence, Trailing(..), loop, Step(..)
   , spaces, lineComment, multiComment, Nestable(..)
   , getChompedString, chompIf, chompWhile, chompUntil, chompUntilEndOr, mapChompedString
@@ -30,7 +30,7 @@ certain scenarios.**
 @docs succeed, (|=), (|.), keep, skip, lazy, andThen, problem
 
 # Branches
-@docs oneOf, map, backtrackable, commit, token
+@docs oneOf, map, mapError, backtrackable, commit, token
 
 # Loops
 @docs sequence, Trailing, loop, Step
@@ -254,7 +254,6 @@ bagToArray bag array =
       bagToArray bag1 (bagToArray bag2 array)
 
 
-
 -- PRIMITIVES
 
 
@@ -288,8 +287,45 @@ map func (Parser parse) =
       Good { pred = p, value = a, state = s1 } ->
         Good { pred = p, value = (func a), state = s1 }
 
-      Bad { pred, bag = x } ->
-        Bad { pred = pred, bag = x }
+      Bad { pred, bag } ->
+        Bad { pred = pred, bag = bag }
+
+
+{-| Transform the `Error` of a parser.
+-}
+mapError : (errA -> errB) -> Parser c errA x -> Parser c errB x
+mapError func (Parser parse) =
+  Parser <| \s0 ->
+    when parse s0 is
+      Good { pred = p, value = a, state = s1 } ->
+        Good { pred = p, value = a, state = s1 }
+
+      Bad { pred, bag } ->
+        Bad { pred = pred, bag = mapBagProblem func bag }
+
+
+mapBagProblem : (a -> b) -> Bag c a -> Bag c b
+mapBagProblem mapper bag =
+  when bag is
+    Empty ->
+      Empty
+
+    AddRight { bag = bag1, deadEnd } ->
+      AddRight
+        { bag = mapBagProblem mapper bag1
+        , deadEnd =
+          { row = deadEnd.row
+          , col = deadEnd.col
+          , problem = mapper deadEnd.problem
+          , contextStack = deadEnd.contextStack
+          }
+        }
+
+    Append { left = bag1, right = bag2 } ->
+      Append
+        { left = mapBagProblem mapper bag1
+        , right = mapBagProblem mapper bag2
+        }
 
 
 map2 : (a -> b -> value) -> Parser c x a -> Parser c x b -> Parser c x value

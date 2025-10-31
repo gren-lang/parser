@@ -4,7 +4,7 @@
     "name": "gren-lang/parser",
     "summary": "a parsing library, focused on simplicity and great error messages",
     "license": "BSD-3-Clause",
-    "version": "6.1.1",
+    "version": "6.2.0",
     "exposed-modules": [
         "Parser",
         "Parser.Advanced"
