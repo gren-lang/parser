@@ -1,5 +1,7 @@
 # Parser
 
+_note: starting with v7.4.0, the parser is now part of `gren-lang/core`. This package is therefore deprecated_
+
 Regular expressions are quite confusing and difficult to use. This library provides a coherent alternative that handles more cases and produces clearer code.
 
 The particular goals of this library are:
